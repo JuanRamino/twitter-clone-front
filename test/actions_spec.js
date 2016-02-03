@@ -48,7 +48,7 @@ describe('actions', () => {
   });
 
   it('loginUser should create LOGIN_USER_REQUEST and LOGIN_USER_SUCCESS actions when API returns 200', (done) => {
-    nock('http://twitter.webabile.it/api')
+    nock('http://twitter.webabile.it:3000/api/auth')
       .post('/login')
       .reply(200, { token: 'veryLongToken' })
 
@@ -67,7 +67,7 @@ describe('actions', () => {
 
   it('loginUser should create LOGIN_USER_REQUEST and LOGIN_USER_FAILURE actions when API returns 401', (done) => {
     
-    nock('http://twitter.webabile.it/api')
+    nock('http://twitter.webabile.it:3000/api/auth')
       .post('/login')
       .reply(401)
 

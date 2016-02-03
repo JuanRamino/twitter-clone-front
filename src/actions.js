@@ -36,7 +36,7 @@ export function logout() {
 export function loginUser(username, password) {
   return function(dispatch) {
     dispatch(loginUserRequest());
-    return fetch('http://twitter.webabile.it/api/login', {
+    return fetch('http://twitter.webabile.it:3000/api/auth/login', {
         method: 'post',
         headers: {
           'Accept': 'application/json',
