@@ -1,4 +1,6 @@
 node_modules
 public/bundle.js
+public/bundle.js.map
 .DS_Store
 tcap.sublime-project
+*.log

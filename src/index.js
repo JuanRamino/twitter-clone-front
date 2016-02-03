@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Root from './components/root';
+import store from './store';
 
-ReactDOM.render(
-  <h1>IT WORKS!</h1>,
-  document.getElementById('container')
-);
+ReactDOM.render((
+  <Root store={store}/>
+), document.getElementById('container'));
