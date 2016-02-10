@@ -41,8 +41,7 @@ class SignIn extends Component {
       <div className='col-xs-12 col-md-6 col-md-offset-3'>
         <h3>Sign In</h3>
         { this.props.statusText ?
-            <div className='alert alert-info'>{this.props.statusText}</div> : 
-            ''
+            <div className='alert alert-info'>{this.props.statusText}</div> : ''
         }
         <form role='form'>
           <div className='form-group'>

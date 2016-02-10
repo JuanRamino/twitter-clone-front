@@ -1,13 +1,15 @@
 import * as types from './actionTypes';
+import jwtDecode from 'jwt-decode';
 
-const initialState = {
+const authInitialState = {
     token: null,
+    user: null,
     isAuthenticated: false,
     isAuthenticating: false,
     statusText: null
 };
 
-export function auth(state = initialState, action) {
+export function auth(state = authInitialState, action) {
   const payload = action.payload;
   
   switch (action.type) {
@@ -21,6 +23,7 @@ export function auth(state = initialState, action) {
     case types.LOGIN_USER_SUCCESS:
       return Object.assign({}, state, {
         token: payload.token,
+        user: jwtDecode(payload.token),
         isAuthenticating: false,
         isAuthenticated: true,
         statusText: 'Logged in'
@@ -29,6 +32,7 @@ export function auth(state = initialState, action) {
     case types.LOGIN_USER_FAILURE:
       return Object.assign({}, state, {
         token: null,
+        user: null,
         isAuthenticating: false,
         isAuthenticated: false,
         statusText: `Authentication error: ${payload.status} ${payload.statusText}`
@@ -37,6 +41,7 @@ export function auth(state = initialState, action) {
     case types.LOGOUT_USER:
       return Object.assign({}, state, {
         token: null,
+        user: null,
         isAuthenticated: false,
         statusText: 'Logged out'
       });
@@ -45,3 +50,39 @@ export function auth(state = initialState, action) {
       return state;
   }
 }
+  
+const tweetsInitialState = {
+  isFetching: false,
+  statusText: null,
+  data: []
+};
+
+export function tweets(state = tweetsInitialState, action) {
+  const payload = action.payload;
+  
+  switch (action.type) {
+
+    case types.USER_TWEETS_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
+
+    case types.USER_TWEETS_SUCCESS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        statusText: 'Successfully fetched',
+        data: payload.tweets
+      });
+    
+    case types.USER_TWEETS_FAILURE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        statusText: `Unsuccessfully fetched: ${payload.status} ${payload.statusText}`
+      });
+
+    default:
+      return state;
+
+  }
+}
+

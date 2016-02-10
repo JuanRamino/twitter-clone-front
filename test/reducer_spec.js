@@ -1,11 +1,17 @@
 import expect from 'expect'
-import { auth } from '../src/reducers'
+import { auth, tweets } from '../src/reducers'
 import * as types from '../src/actionTypes'
+import jwt from 'jsonwebtoken';
+
 
 describe('auth reducer', () => {
+  
+  const user = { id: 'test', name: 'test' };
+  const token = jwt.sign(user, 'secret', { noTimestamp: true });
 
   const initialState = {
     token: null,
+    user: null,
     isAuthenticated: false,
     isAuthenticating: false,
     statusText: null
@@ -33,12 +39,13 @@ describe('auth reducer', () => {
       auth(undefined, {
         type: types.LOGIN_USER_SUCCESS,
         payload: {
-          token: 'secret'
+          token: token
         }
       })
     ).toEqual(Object.assign({}, initialState, {
       isAuthenticated: true,
-      token: 'secret',
+      user: user,
+      token: token,
       statusText: 'Logged in'
       })
     )
@@ -69,4 +76,65 @@ describe('auth reducer', () => {
       })
     )
   });
+});
+
+describe('tweets reducer', () => {
+
+  const initialState = {
+    isFetching: false,
+    statusText: null,
+    data: []
+  };
+
+  it('should return the initial state', () => {
+    expect(
+      tweets(undefined, {})
+    ).toEqual(initialState)
+  });
+
+  it('should handle USER_TWEETS_REQUEST', () => {
+    expect(
+      tweets(undefined, {
+        type: types.USER_TWEETS_REQUEST
+      })
+    ).toEqual(Object.assign({}, initialState, {
+      isFetching: true
+      })
+    )
+  });
+
+  it('should handle USER_TWEETS_SUCCESS', () => {
+    expect(
+      tweets(undefined, {
+        type: types.USER_TWEETS_SUCCESS,
+        payload: {
+          tweets: [
+            'tweet 1',
+            'tweet 2'
+          ]
+        }
+      })
+    ).toEqual(Object.assign({}, initialState, {
+      statusText: 'Successfully fetched',
+      data: [
+        'tweet 1',
+        'tweet 2'
+      ]
+    }));
+  });
+
+  it('should handle USER_TWEETS_FAILURE', () => {
+    expect(
+      tweets(undefined, {
+        type: types.USER_TWEETS_FAILURE,
+        payload: {
+          status: 404,
+          statusText: 'Not found'
+        }
+     })
+    ).toEqual(Object.assign({}, initialState, {
+      statusText: 'Unsuccessfully fetched: 404 Not found'
+    }));
+  });
+
 });

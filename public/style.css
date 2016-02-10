@@ -1,6 +1,10 @@
 .app-info {
   background-color: #ddd;
+  padding: 25px;
 }
 .app-info ul {
   list-style: none;
+}
+#container {
+  padding: 10px;
 }
