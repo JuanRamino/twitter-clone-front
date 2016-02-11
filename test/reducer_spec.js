@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { auth, tweets, addTweet } from '../src/reducers'
+import { auth, tweets } from '../src/reducers'
 import * as types from '../src/actionTypes'
 import jwt from 'jsonwebtoken';
 
@@ -28,10 +28,10 @@ describe('auth reducer', () => {
       auth(undefined, {
         type: types.LOGIN_USER_REQUEST
       })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       isAuthenticating: true
-      })
-    )
+    });
   });
 
   it('should handle LOGIN_USER_SUCCESS', () => {
@@ -42,13 +42,13 @@ describe('auth reducer', () => {
           token: token
         }
       })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       isAuthenticated: true,
       user: user,
       token: token,
       statusText: 'Logged in'
-      })
-    )
+    });
   });
 
   it('should handle LOGIN_USER_FAILURE', () => {
@@ -60,10 +60,10 @@ describe('auth reducer', () => {
           statusText: 'Not found'
         }
       })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       statusText: 'Authentication error: 404 Not found'
-      })
-    )
+    });
   });
 
   it('should handle LOGOUT_USER', () => {
@@ -71,10 +71,10 @@ describe('auth reducer', () => {
       auth(undefined, {
         type: types.LOGOUT_USER
       })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       statusText: 'Logged out'
-      })
-    )
+    });
   });
 });
 
@@ -82,6 +82,7 @@ describe('tweets reducer', () => {
 
   const initialState = {
     isFetching: false,
+    isSaving: false,
     statusText: null,
     data: []
   };
@@ -97,10 +98,10 @@ describe('tweets reducer', () => {
       tweets(undefined, {
         type: types.USER_TWEETS_REQUEST
       })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       isFetching: true
-      })
-    )
+    });
   });
 
   it('should handle USER_TWEETS_SUCCESS', () => {
@@ -114,13 +115,14 @@ describe('tweets reducer', () => {
           ]
         }
       })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       statusText: 'Successfully fetched',
       data: [
         'tweet 1',
         'tweet 2'
       ]
-    }));
+    });
   });
 
   it('should handle USER_TWEETS_FAILURE', () => {
@@ -132,64 +134,69 @@ describe('tweets reducer', () => {
           statusText: 'Not found'
         }
      })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       statusText: 'Unsuccessfully fetched: 404 Not found'
-    }));
-  });
-
-});
-
-describe('addTweet reducer', () => {
-
-  const initialState = {
-    isSaving: false,
-    statusText: null,
-    tweet: null
-  };
-
-  it('should return the initial state', () => {
-    expect(
-      addTweet(undefined, {})
-    ).toEqual(initialState)
+    });
   });
 
   it('should handle ADD_TWEET_REQUEST', () => {
     expect(
-      addTweet(undefined, {
+      tweets(undefined, {
         type: types.ADD_TWEET_REQUEST
       })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       isSaving: true
-      })
-    )
+    });
   });
 
   it('should handle ADD_TWEET_SUCCESS', () => {
     expect(
-      addTweet(undefined, {
+      tweets(undefined, {
         type: types.ADD_TWEET_SUCCESS,
         payload: {
           tweet: 'tweet 1'
         }
       })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       statusText: 'Successfully saved',
-      tweet: 'tweet 1'
-    }));
+      data: ['tweet 1']
+    });
+  });
+
+  it('should handle ADD_TWEET_SUCCESS when data has been alredy fetched', () => {
+    expect(
+      tweets({
+        ...initialState,
+        data: ['tweet 2', 'tweet 3']
+      }, {
+        type: types.ADD_TWEET_SUCCESS,
+        payload: {
+          tweet: 'tweet 1'
+        }
+      })
+    ).toEqual({
+      ...initialState,
+      statusText: 'Successfully saved',
+      data: ['tweet 1', 'tweet 2', 'tweet 3']
+    });
   });
 
   it('should handle ADD_TWEET_FAILURE', () => {
     expect(
-      addTweet(undefined, {
+      tweets(undefined, {
         type: types.ADD_TWEET_FAILURE,
         payload: {
           status: 404,
           statusText: 'Not found'
         }
      })
-    ).toEqual(Object.assign({}, initialState, {
+    ).toEqual({
+      ...initialState,
       statusText: 'Unsuccessfully saved: 404 Not found'
-    }));
+    });
   });
 
 });
