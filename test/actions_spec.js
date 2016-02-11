@@ -92,12 +92,12 @@ describe('auth actions', () => {
 
 });
 
-describe('tweets action', () => {
+describe('fetch tweets action', () => {
   afterEach(() => {
     nock.cleanAll()
   });
 
-  it('userTweetsRequest should create USER_TWEETS_REQUEST', () => {
+  it('userTweets Request should create USER_TWEETS_REQUEST', () => {
     expect(actions.userTweetsRequest()).toEqual({type: types.USER_TWEETS_REQUEST});
   });
 
@@ -115,7 +115,7 @@ describe('tweets action', () => {
     });
   });
 
-  it('userTweetsFailure should create USER_TWEETS_FAILURE', () => {
+  it('userTweets Failure should create USER_TWEETS_FAILURE', () => {
     expect(actions.userTweetsFailure({
       response: {
         status: 404,
@@ -130,7 +130,7 @@ describe('tweets action', () => {
     });
   });
 
-  it(' UserTweets should create USER_TWEETS_REQUEST and USER_TWEETS_SUCCESS actions when API returns 200', (done) => {
+  it('userTweets should create USER_TWEETS_REQUEST and USER_TWEETS_SUCCESS actions when API returns 200', (done) => {
     
     nock('http://twitter.webabile.it:3000/api')
       .get('/tweets/?userId=test&stream=profile_timeline')
@@ -149,10 +149,10 @@ describe('tweets action', () => {
     store.dispatch(actions.userTweets('token', { id: 'test' }))
   });
 
-  it(' UserTweets should create USER_TWEETS_REQUEST and USER_TWEETS_FAILURE actions when API returns 401', (done) => {
+  it('userTweets should create USER_TWEETS_REQUEST and USER_TWEETS_FAILURE actions when API returns 401', (done) => {
 
     nock('http://twitter.webabile.it:3000/api')
-      .get('/tweets/?userId=wrong&stream=profile_timeline')
+      .get('/tweets/?userId=test&stream=profile_timeline')
       .reply(401)
 
     const expectedActions = [
@@ -166,7 +166,85 @@ describe('tweets action', () => {
     ];
 
     const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.userTweets('token', { id: 'wrong' }))
+    store.dispatch(actions.userTweets('wrongToken', { id: 'test' }))
+  });
+
+});
+
+describe('add tweet action', () => {
+  afterEach(() => {
+    nock.cleanAll()
+  });
+
+  it('AddTweetRequest should create USER_TWEETS_REQUEST', () => {
+    expect(actions.addTweetRequest()).toEqual({type: types.ADD_TWEET_REQUEST});
+  });
+
+  it('AddTweetSuccess should create ADD_TWEET_SUCCESS', () => {
+    expect(actions.addTweetSuccess(
+      'new tweet' 
+    )).toEqual({
+      type: types.ADD_TWEET_SUCCESS,
+      payload: {
+        tweet: 'new tweet'
+      }
+    });
+  });
+
+  it('addTweetFailure should create ADD_TWEET_FAILURE', () => {
+    expect(actions.addTweetFailure({
+      response: {
+        status: 404,
+        statusText: 'Not found'
+      }
+    })).toEqual({
+      type: types.ADD_TWEET_FAILURE,
+      payload: {
+        status: 404,
+        statusText: 'Not found'
+      }
+    });
+  });
+
+  it('addTweet should create ADD_TWEET_REQUEST and ADD_TWEET_SUCCESS actions when API returns 200', (done) => {
+    
+    let tweet = { text: 'new tweet', created: 'today', id: 'test' };
+    
+    nock('http://twitter.webabile.it:3000/api')
+      .post('/tweets')
+      .reply(200, { tweet })
+
+    const expectedActions = [
+      { type: types.ADD_TWEET_REQUEST },
+      { type: types.ADD_TWEET_SUCCESS,
+        payload: {
+          tweet
+        }
+      }
+    ];
+
+    const store = mockStore({}, expectedActions, done)
+    store.dispatch(actions.addTweet('token', { id: 'test' }))
+  });
+
+  it('addTweet should create ADD_TWEET_REQUEST and ADD_TWEET_FAILURE actions when API returns 401', (done) => {
+
+    nock('http://twitter.webabile.it:3000/api')
+      .post('/tweets')
+      .reply(401)
+
+    const expectedActions = [
+      { type: types.ADD_TWEET_REQUEST },
+      { type: types.ADD_TWEET_FAILURE,
+        payload: {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      }
+    ];
+
+    const store = mockStore({}, expectedActions, done)
+    store.dispatch(actions.addTweet('wrongToken', { id: 'test' }));
   });
 
 });

@@ -8,7 +8,7 @@ import { loginUserSuccess } from './actions';
 // auth token is in localstorage?
 let token = localStorage.getItem('token');
 if (token !== null) {
-    store.dispatch(loginUserSuccess(token));
+  store.dispatch(loginUserSuccess(token));
 }
 
 ReactDOM.render((

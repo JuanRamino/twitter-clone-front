@@ -1,4 +1,4 @@
-import { Api } from './utils';
+import { Api, checkHttpStatus } from './utils';
 import * as types from './actionTypes';
 
 // AUTH ACTIONS
@@ -35,25 +35,6 @@ export function logout() {
     type: types.LOGOUT_USER
   }
 }
-/*
-export function loginUser(username, password) {
-  return function(dispatch) {
-    dispatch(loginUserRequest());
-    return fetch(API + '/auth/login', {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({username, password})
-        })
-        .then(checkHttpStatus)
-        .then(res => res.json())
-        .then(json => dispatch(loginUserSuccess(json.token)))
-        .catch(ex => dispatch(loginUserFailure(ex)))
-  }
-}
-*/
 
 export function loginUser(username, password) {
   return function(dispatch) {
@@ -100,11 +81,13 @@ export function userTweetsFailure(error) {
   }
 }
 
-/*
-export function userTweets(token, user) {
+
+export function userTweets(token = localStorage.getItem('token'), user) {
   return function(dispatch) {
     dispatch(userTweetsRequest());
-    return fetch(`${API}/tweets/?userId=${user.id}&stream=profile_timeline`, {
+
+    let APIroot = 'http://twitter.webabile.it:3000/api'
+    return fetch(`${APIroot}/tweets/?userId=${user.id}&stream=profile_timeline`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -116,8 +99,9 @@ export function userTweets(token, user) {
       .catch(ex => dispatch(userTweetsFailure(ex)))
   }
 }
-*/
-export function userTweets(token = localStorage.getItem('token'), user) {
+
+/*
+export function userTweets(token = localStorage.getItem('token'), userId) {
   return function(dispatch) {
     dispatch(userTweetsRequest());
 
@@ -129,18 +113,54 @@ export function userTweets(token = localStorage.getItem('token'), user) {
       }
     };
 
-    return Api.get(`tweets/?userId=${user.id}&stream=profile_timeline`, options)
+    return Api.get(`tweets/?userId=${userId}&stream=profile_timeline`, options)
       .then(json => dispatch(userTweetsSuccess(json.tweets)))
       .catch(ex => dispatch(userTweetsFailure(ex)))
   }
 }
-
-/*
-types.ADD_TWEET_REQUEST
-types.ADD_TWEET_FAILURE
-types.ADD_TWEET_SUCCESS
 */
 
+export function addTweetRequest(){
+  return {
+    type: types.ADD_TWEET_REQUEST
+  }
+}
 
+export function addTweetSuccess(tweet) {
+  return {
+    type: types.ADD_TWEET_SUCCESS,
+    payload: {
+      tweet
+    }
+  }
+}
 
-  
+export function addTweetFailure(error) {
+  return {
+    type: types.ADD_TWEET_FAILURE,
+    payload: {
+      status: error.response.status,
+      statusText: error.response.statusText
+    }
+  }
+}
+
+export function addTweet(token = localStorage.getItem('token'), tweet) {
+  return function(dispatch) {
+    dispatch(addTweetRequest());
+
+    const options = {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      },
+      body: JSON.stringify({ tweet })
+    };
+
+    return Api.get('tweets', options)
+      .then(json => dispatch(addTweetSuccess(json.tweet)))
+      .catch(ex => dispatch(addTweetFailure(ex)))
+  }
+}

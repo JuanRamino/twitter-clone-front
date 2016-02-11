@@ -1,5 +1,5 @@
 import expect from 'expect'
-import { auth, tweets } from '../src/reducers'
+import { auth, tweets, addTweet } from '../src/reducers'
 import * as types from '../src/actionTypes'
 import jwt from 'jsonwebtoken';
 
@@ -134,6 +134,61 @@ describe('tweets reducer', () => {
      })
     ).toEqual(Object.assign({}, initialState, {
       statusText: 'Unsuccessfully fetched: 404 Not found'
+    }));
+  });
+
+});
+
+describe('addTweet reducer', () => {
+
+  const initialState = {
+    isSaving: false,
+    statusText: null,
+    tweet: null
+  };
+
+  it('should return the initial state', () => {
+    expect(
+      addTweet(undefined, {})
+    ).toEqual(initialState)
+  });
+
+  it('should handle ADD_TWEET_REQUEST', () => {
+    expect(
+      addTweet(undefined, {
+        type: types.ADD_TWEET_REQUEST
+      })
+    ).toEqual(Object.assign({}, initialState, {
+      isSaving: true
+      })
+    )
+  });
+
+  it('should handle ADD_TWEET_SUCCESS', () => {
+    expect(
+      addTweet(undefined, {
+        type: types.ADD_TWEET_SUCCESS,
+        payload: {
+          tweet: 'tweet 1'
+        }
+      })
+    ).toEqual(Object.assign({}, initialState, {
+      statusText: 'Successfully saved',
+      tweet: 'tweet 1'
+    }));
+  });
+
+  it('should handle ADD_TWEET_FAILURE', () => {
+    expect(
+      addTweet(undefined, {
+        type: types.ADD_TWEET_FAILURE,
+        payload: {
+          status: 404,
+          statusText: 'Not found'
+        }
+     })
+    ).toEqual(Object.assign({}, initialState, {
+      statusText: 'Unsuccessfully saved: 404 Not found'
     }));
   });
 

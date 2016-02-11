@@ -61,6 +61,12 @@ class SignIn extends Component {
   }
 }
 
+SignIn.propTypes = {
+  isAuthenticating: PropTypes.bool,
+  statusText: PropTypes.string,
+  actions: PropTypes.object.isRequired
+}
+
 const mapStateToProps = (state) => ({
   isAuthenticating: state.auth.isAuthenticating,
   statusText: state.auth.statusText

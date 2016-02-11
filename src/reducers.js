@@ -86,3 +86,35 @@ export function tweets(state = tweetsInitialState, action) {
   }
 }
 
+const addTweetInitialState = {
+  isSaving: false,
+  statusText: null,
+  tweet: null
+};
+
+export function addTweet(state = addTweetInitialState, action) {
+  const payload = action.payload;
+
+  switch (action.type) {
+    case types.ADD_TWEET_REQUEST:
+      return Object.assign({}, state, {
+        isSaving: true
+      });
+
+    case types.ADD_TWEET_SUCCESS:
+      return Object.assign({}, state, {
+        isSaving: false,
+        statusText: 'Successfully saved',
+        tweet: payload.tweet
+      });
+    
+    case types.ADD_TWEET_FAILURE:
+      return Object.assign({}, state, {
+        isSaving: false,
+        statusText: `Unsuccessfully saved: ${payload.status} ${payload.statusText}`
+      });
+
+    default:
+      return state;
+  }
+}
