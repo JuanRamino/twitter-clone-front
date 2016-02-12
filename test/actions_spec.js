@@ -146,7 +146,7 @@ describe('fetch tweets action', () => {
     ];
 
     const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.userTweets('token', { id: 'test' }))
+    store.dispatch(actions.userTweets({ id: 'test' }, 'token'))
   });
 
   it('userTweets should create USER_TWEETS_REQUEST and USER_TWEETS_FAILURE actions when API returns 401', (done) => {
@@ -166,7 +166,7 @@ describe('fetch tweets action', () => {
     ];
 
     const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.userTweets('wrongToken', { id: 'test' }))
+    store.dispatch(actions.userTweets({ id: 'test' }, 'wrongToken'))
   });
 
 });
@@ -176,11 +176,11 @@ describe('add tweet action', () => {
     nock.cleanAll()
   });
 
-  it('AddTweetRequest should create USER_TWEETS_REQUEST', () => {
+  it('addTweetRequest should create ADD_TWEET_REQUEST', () => {
     expect(actions.addTweetRequest()).toEqual({type: types.ADD_TWEET_REQUEST});
   });
 
-  it('AddTweetSuccess should create ADD_TWEET_SUCCESS', () => {
+  it('addTweetSuccess should create ADD_TWEET_SUCCESS', () => {
     expect(actions.addTweetSuccess(
       'new tweet' 
     )).toEqual({
@@ -224,7 +224,7 @@ describe('add tweet action', () => {
     ];
 
     const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.addTweet('token', { id: 'test' }))
+    store.dispatch(actions.addTweet({ id: 'test' }, 'token'))
   });
 
   it('addTweet should create ADD_TWEET_REQUEST and ADD_TWEET_FAILURE actions when API returns 401', (done) => {
@@ -244,7 +244,79 @@ describe('add tweet action', () => {
     ];
 
     const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.addTweet('wrongToken', { id: 'test' }));
+    store.dispatch(actions.addTweet({ id: 'test' }, 'wrongToken'));
+  });
+
+});
+
+describe('delete tweet action', () => {
+  afterEach(() => {
+    nock.cleanAll()
+  });
+
+  it('delTweetRequest should create DEL_TWEET_REQUEST', () => {
+    expect(actions.delTweetRequest()).toEqual({type: types.DEL_TWEET_REQUEST});
+  });
+
+  it('delTweetSuccess should create DEL_TWEET_SUCCESS', () => {
+    expect(actions.delTweetSuccess(
+      '1234'
+    )).toEqual({
+      type: types.DEL_TWEET_SUCCESS,
+      id: '1234'
+    });
+  });
+
+  it('delTweetFailure should create DEL_TWEET_FAILURE', () => {
+    expect(actions.delTweetFailure({
+      response: {
+        status: 404,
+        statusText: 'Not found'
+      }
+    })).toEqual({
+      type: types.DEL_TWEET_FAILURE,
+      payload: {
+        status: 404,
+        statusText: 'Not found'
+      }
+    });
+  });
+
+  it('delTweet should create DEL_TWEET_REQUEST and DEL_TWEET_SUCCESS actions when API returns 200', (done) => {
+    
+    nock('http://twitter.webabile.it:3000/api')
+      .delete('/tweets/1234')
+      .reply(200, {})
+
+    const expectedActions = [
+      { type: types.DEL_TWEET_REQUEST },
+      { type: types.DEL_TWEET_SUCCESS, 
+        id: '1234'
+      }
+    ];
+
+    const store = mockStore({}, expectedActions, done)
+    store.dispatch(actions.delTweet('1234'));
+  });
+
+  it('delTweet should create DEL_TWEET_REQUEST and DEL_TWEET_FAILURE actions when API returns 401', (done) => {
+
+    nock('http://twitter.webabile.it:3000/api')
+      .delete('/tweets/1234')
+      .reply(404)
+
+    const expectedActions = [
+      { type: types.DEL_TWEET_REQUEST },
+      { type: types.DEL_TWEET_FAILURE,
+        payload: {
+          status: 404,
+          statusText: 'Not Found'
+        }
+      }
+    ];
+
+    const store = mockStore({}, expectedActions, done)
+    store.dispatch(actions.delTweet('1234'));
   });
 
 });

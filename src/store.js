@@ -1,12 +1,11 @@
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, combineReducers} from 'redux';
-import { auth, tweets, addTweet } from './reducers'
+import { auth, tweets } from './reducers'
 import createLogger from 'redux-logger';
 
 const rootReducer = combineReducers({
   auth,
-  tweets,
-  addTweet 
+  tweets 
 });
 
 const createStoreWithMiddleware = applyMiddleware(thunk, createLogger());

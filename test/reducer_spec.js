@@ -83,6 +83,7 @@ describe('tweets reducer', () => {
   const initialState = {
     isFetching: false,
     isSaving: false,
+    isDeleting: false,
     statusText: null,
     data: []
   };
@@ -196,6 +197,54 @@ describe('tweets reducer', () => {
     ).toEqual({
       ...initialState,
       statusText: 'Unsuccessfully saved: 404 Not found'
+    });
+  });
+
+  it('should handle DEL_TWEET_REQUEST', () => {
+    expect(
+      tweets(undefined, {
+        type: types.DEL_TWEET_REQUEST
+      })
+    ).toEqual({
+      ...initialState,
+      isDeleting: true
+    });
+  });
+
+  it('should handle DEL_TWEET_SUCCESS', () => {
+    expect(
+      tweets({
+        ...initialState,
+        data: [
+          { id: '567'},
+          { id: '1234'},
+          { id: '789'}
+        ]}, {
+        type: types.DEL_TWEET_SUCCESS,
+        id: '1234'
+      })
+    ).toEqual({
+      ...initialState,
+      statusText: 'Successfully deleted',
+      data: [
+        { id: '567'}, 
+        { id: '789'}
+      ]
+    });
+  });
+
+  it('should handle DEL_TWEET_FAILURE', () => {
+    expect(
+      tweets(undefined, {
+        type: types.DEL_TWEET_FAILURE,
+        payload: {
+          status: 404,
+          statusText: 'Not found'
+        }
+     })
+    ).toEqual({
+      ...initialState,
+      statusText: 'Unsuccessfully deleted: 404 Not found'
     });
   });
 

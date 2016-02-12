@@ -54,7 +54,7 @@ export function loginUser(username, password) {
       .catch(ex =>dispatch(loginUserFailure(ex)))
   }
 }
-// TWWET ACTIONS
+// TWEET ACTIONS
 
 export function userTweetsRequest(){
   return {
@@ -81,27 +81,7 @@ export function userTweetsFailure(error) {
   }
 }
 
-
-export function userTweets(token = localStorage.getItem('token'), user) {
-  return function(dispatch) {
-    dispatch(userTweetsRequest());
-
-    let APIroot = 'http://twitter.webabile.it:3000/api'
-    return fetch(`${APIroot}/tweets/?userId=${user.id}&stream=profile_timeline`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'x-access-token': token
-      }})
-      .then(checkHttpStatus)
-      .then(res => res.json())
-      .then(json => dispatch(userTweetsSuccess(json.tweets)))
-      .catch(ex => dispatch(userTweetsFailure(ex)))
-  }
-}
-
-/*
-export function userTweets(token = localStorage.getItem('token'), userId) {
+export function userTweets(user, token = localStorage.getItem('token')) {
   return function(dispatch) {
     dispatch(userTweetsRequest());
 
@@ -113,12 +93,11 @@ export function userTweets(token = localStorage.getItem('token'), userId) {
       }
     };
 
-    return Api.get(`tweets/?userId=${userId}&stream=profile_timeline`, options)
+    return Api.get(`tweets/?userId=${user.id}&stream=profile_timeline`, options)
       .then(json => dispatch(userTweetsSuccess(json.tweets)))
       .catch(ex => dispatch(userTweetsFailure(ex)))
   }
 }
-*/
 
 export function addTweetRequest(){
   return {
@@ -145,7 +124,7 @@ export function addTweetFailure(error) {
   }
 }
 
-export function addTweet(token = localStorage.getItem('token'), tweet) {
+export function addTweet(tweet, token = localStorage.getItem('token')) {
   return function(dispatch) {
     dispatch(addTweetRequest());
 
@@ -162,5 +141,57 @@ export function addTweet(token = localStorage.getItem('token'), tweet) {
     return Api.get('tweets', options)
       .then(json => dispatch(addTweetSuccess(json.tweet)))
       .catch(ex => dispatch(addTweetFailure(ex)))
+  }
+}
+
+export function delTweetRequest(){
+  return {
+    type: types.DEL_TWEET_REQUEST
+  }
+}
+
+export function delTweetSuccess(id) {
+  return {
+    type: types.DEL_TWEET_SUCCESS,
+    id
+  }
+}
+
+export function delTweetFailure(error) {
+  return {
+    type: types.DEL_TWEET_FAILURE,
+    payload: {
+      status: error.response.status,
+      statusText: error.response.statusText
+    }
+  }
+}
+
+export function delTweet(tweetId, token = localStorage.getItem('token')) {
+  return function(dispatch) {
+    dispatch(delTweetRequest());
+
+    const options = {
+      method: 'delete',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    };
+
+    return fetch('http://twitter.webabile.it:3000/api/tweets/' + tweetId , options)
+      .then(checkHttpStatus)
+      .then(res => res.json())
+      .then(json => dispatch(delTweetSuccess(tweetId)))
+      .catch(ex => dispatch(delTweetFailure(ex)))
+    /*
+    return Api.get(`tweets/${tweetId}`, options)
+      .then(json => dispatch(delTweetSuccess()))
+      .catch(ex => {
+        console.log(ex);
+        return dispatch(delTweetFailure(ex))
+      })
+    */
   }
 }

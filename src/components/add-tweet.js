@@ -22,7 +22,7 @@ class AddTweet extends Component {
     let tweet = {
       text: text
     };
-    this.props.actions.addTweet(undefined, tweet)
+    this.props.actions.addTweet(tweet)
   }
 
   handleSubmit(e) {
@@ -62,9 +62,8 @@ AddTweet.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  isSaving: state.addTweet.isSaving,
-  statusText: state.addTweet.statusText,
-  tweet: state.addTweet.tweet
+  isSaving: state.tweets.isSaving,
+  statusText: state.tweets.statusText
 });
 
 const mapDispatchToProps = (dispatch) => ({

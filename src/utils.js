@@ -16,5 +16,5 @@ export const Api = {
     return fetch(this.rootUrl + url, options)
       .then(checkHttpStatus)
       .then(res => res.json())
-  } 
+  }
 }

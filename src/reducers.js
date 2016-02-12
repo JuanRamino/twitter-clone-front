@@ -58,6 +58,7 @@ export function auth(state = authInitialState, action) {
 const tweetsInitialState = {
   isFetching: false,
   isSaving: false,
+  isDeleting: false,
   statusText: null,
   data: []
 };
@@ -88,26 +89,49 @@ export function tweets(state = tweetsInitialState, action) {
         statusText: `Unsuccessfully fetched: ${payload.status} ${payload.statusText}`
       };
 
-      case types.ADD_TWEET_REQUEST:
+    case types.ADD_TWEET_REQUEST:
       return {
         ...state,
         isSaving: true
       };
 
-      case types.ADD_TWEET_SUCCESS:
-        return {
-          ...state,
-          isSaving: false,
-          statusText: 'Successfully saved',
-          data: [ payload.tweet, ...state.data ]
-        };
-      
-      case types.ADD_TWEET_FAILURE:
-        return {
-          ...state,
-          isSaving: false,
-          statusText: `Unsuccessfully saved: ${payload.status} ${payload.statusText}`
-        };
+    case types.ADD_TWEET_SUCCESS:
+      return {
+        ...state,
+        isSaving: false,
+        statusText: 'Successfully saved',
+        data: [ payload.tweet, ...state.data ]
+      };
+    
+    case types.ADD_TWEET_FAILURE:
+      return {
+        ...state,
+        isSaving: false,
+        statusText: `Unsuccessfully saved: ${payload.status} ${payload.statusText}`
+      };
+
+    case types.DEL_TWEET_REQUEST:
+      return {
+        ...state,
+        isDeleting: true
+      };
+
+    case types.DEL_TWEET_SUCCESS:
+      return {
+        ...state,
+        isDeleting: false,
+        statusText: 'Successfully deleted',
+        data: state.data.filter(tweet => {
+          return tweet.id !== action.id
+        })
+      };
+    
+    case types.DEL_TWEET_FAILURE:
+      return {
+        ...state,
+        isDeleting: false,
+        statusText: `Unsuccessfully deleted: ${payload.status} ${payload.statusText}`
+      };
 
     default:
       return state;

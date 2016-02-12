@@ -17,7 +17,7 @@ class TweetList extends Component {
 
   fetchTweets(event) {
     if (event) event.preventDefault();
-    this.props.actions.userTweets(undefined, this.props.user);
+    this.props.actions.userTweets(this.props.user);
   }
   
   renderTweets() {
