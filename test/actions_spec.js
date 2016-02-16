@@ -145,8 +145,13 @@ describe('fetch tweets action', () => {
       }
     ];
 
-    const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.userTweets({ id: 'test' }, 'token'))
+    const store = mockStore({ 
+      auth: {
+        token: 'token',
+        user: { id: 'test' }
+      }
+    }, expectedActions, done)
+    store.dispatch(actions.userTweets())
   });
 
   it('userTweets should create USER_TWEETS_REQUEST and USER_TWEETS_FAILURE actions when API returns 401', (done) => {
@@ -165,8 +170,13 @@ describe('fetch tweets action', () => {
       }
     ];
 
-    const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.userTweets({ id: 'test' }, 'wrongToken'))
+    const store = mockStore({
+      auth: {
+        token: 'token',
+        user: { id: 'test' }
+      }     
+    }, expectedActions, done)
+    store.dispatch(actions.userTweets())
   });
 
 });
@@ -223,8 +233,13 @@ describe('add tweet action', () => {
       }
     ];
 
-    const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.addTweet({ id: 'test' }, 'token'))
+    const store = mockStore({
+      auth: {
+        token: 'token',
+        user: { id: 'test' }
+      }
+    }, expectedActions, done)
+    store.dispatch(actions.addTweet(tweet))
   });
 
   it('addTweet should create ADD_TWEET_REQUEST and ADD_TWEET_FAILURE actions when API returns 401', (done) => {
@@ -243,8 +258,13 @@ describe('add tweet action', () => {
       }
     ];
 
-    const store = mockStore({}, expectedActions, done)
-    store.dispatch(actions.addTweet({ id: 'test' }, 'wrongToken'));
+    const store = mockStore({
+      auth: {
+        token: 'token',
+        user: { id: 'test' }
+      }
+    }, expectedActions, done)
+    store.dispatch(actions.addTweet());
   });
 
 });
@@ -295,7 +315,12 @@ describe('delete tweet action', () => {
       }
     ];
 
-    const store = mockStore({}, expectedActions, done)
+    const store = mockStore({
+      auth: {
+        token: 'token',
+        user: { id: 'test' }
+      }
+    }, expectedActions, done)
     store.dispatch(actions.delTweet('1234'));
   });
 
@@ -315,7 +340,12 @@ describe('delete tweet action', () => {
       }
     ];
 
-    const store = mockStore({}, expectedActions, done)
+    const store = mockStore({
+      auth: {
+        token: 'token',
+        user: { id: 'test' }
+      }
+    }, expectedActions, done)
     store.dispatch(actions.delTweet('1234'));
   });
 

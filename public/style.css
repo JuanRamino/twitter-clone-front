@@ -8,3 +8,11 @@
 #container {
   padding: 10px;
 }
+.panel-heading {
+  position: relative;
+}
+.panel-heading button {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}

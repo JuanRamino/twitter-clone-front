@@ -18,3 +18,7 @@ export const Api = {
       .then(res => res.json())
   }
 }
+
+export function formatDate(date) {
+  return new Date(date * 1000).toDateString();
+}
