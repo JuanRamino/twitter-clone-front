@@ -22,3 +22,16 @@
 li {
   list-style: none;
 }
+html {
+  min-height: 100%;
+}
+body {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+body > .row, .app-info {
+  height: 100%;
+}
