@@ -49,7 +49,8 @@ export class TweetForm extends Component {
           placeholder="Be nice"
           value={this.state.text}
           onChange={this.handleChange}
-          onKeyDown={this.handleSubmit} />
+          onKeyDown={this.handleSubmit}
+        />
       </form>
     )
   }

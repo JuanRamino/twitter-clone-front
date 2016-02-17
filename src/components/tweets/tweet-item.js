@@ -27,7 +27,7 @@ export class TweetItem extends Component {
           <button 
             type="button"
             className="btn btn-danger"
-            onClick={this.delete} >
+            onClick={this.delete}>
             X
           </button>
         </div>

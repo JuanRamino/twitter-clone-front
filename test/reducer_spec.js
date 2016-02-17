@@ -3,7 +3,6 @@ import { auth, tweets } from '../src/reducers'
 import * as types from '../src/actionTypes'
 import jwt from 'jsonwebtoken';
 
-
 describe('auth reducer', () => {
   
   const user = { id: 'test', name: 'test' };
