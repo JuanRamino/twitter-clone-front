@@ -25,6 +25,7 @@ module.exports = {
     contentBase: './public',
     hot: true
   },
+  historyApiFallback: true,
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ]

@@ -16,3 +16,9 @@
   right: 3px;
   top: 3px;
 }
+.sign-in input {
+  margin-bottom: 5px;
+}
+li {
+  list-style: none;
+}

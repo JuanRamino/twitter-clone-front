@@ -50,19 +50,17 @@ export class SignIn extends Component {
     } = this.props;
 
     return (
-      <div className='sig-in'>
+      <div className='sign-in'>
         <h3>Sign In</h3>
         { this.props.statusText ?
             <div className='alert alert-info'>{statusText}</div> : ''
         }
-        <form role='form'>
-          <div className='form-group'>
-            {this.renderUsernameInput()}
-            {this.renderPasswordInput()}
-          </div>
+        <form role='form' className='form-group'>
+          {this.renderUsernameInput()}
+          {this.renderPasswordInput()}
           <button 
             type='submit'
-            className='btn btn-lg'
+            className='btn btn-primary btn-lg'
             disabled={isAuthenticating}
             onClick={this.login}>
             Submit
