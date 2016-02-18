@@ -23,6 +23,7 @@ export class SignIn extends Component {
   
   renderUsernameInput() {
     return <input 
+      autoFocus
       type='text'
       className='form-control input-lg'
       placeholder='test' 

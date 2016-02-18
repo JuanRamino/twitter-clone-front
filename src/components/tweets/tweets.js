@@ -41,7 +41,7 @@ export class Tweets extends Component {
           tweets={tweets}
         />
       </div>
-    )
+    );
   }
 }
 

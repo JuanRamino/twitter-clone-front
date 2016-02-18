@@ -42,7 +42,7 @@ export class App extends Component {
     return (
       <div>
         <header className="header row">
-          <h2 className="header-title col-md-9">Tweet Clone App </h2>
+          <h2 className="header-title col-md-9">Twitter Clone App</h2>
 
           <ul className="header-links col-md-3">
             {auth.isAuthenticated ?
