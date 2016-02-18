@@ -1,7 +1,17 @@
 {
   "name": "twitter-clone-front-app",
   "version": "1.0.0",
-  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuanRamino/twitter-clone-front.git"
+  },
+  "authors": [
+    {
+      "name": "JuanRamino",
+      "email": "juan.ramino@gmail.com"
+    }
+  ],
+  "description": "A twitter clone FrontEnd app",
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
