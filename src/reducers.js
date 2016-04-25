@@ -9,6 +9,7 @@ const authInitialState = {
     statusText: null
 };
 
+// AUTH REDUCER
 export function auth(state = authInitialState, action) {
   const payload = action.payload;
   
@@ -63,6 +64,7 @@ const tweetsInitialState = {
   data: []
 };
 
+// TWEET REDUCER
 export function tweets(state = tweetsInitialState, action) {
   const payload = action.payload;
   

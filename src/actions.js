@@ -56,7 +56,6 @@ export function loginUser(username, password) {
 }
 
 // TWEET ACTIONS
-
 export function userTweetsRequest(){
   return {
     type: types.USER_TWEETS_REQUEST
