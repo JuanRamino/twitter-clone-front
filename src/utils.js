@@ -13,7 +13,7 @@ export function checkHttpStatus(response) {
 
 
 export const Api = {
-  rootUrl: 'http://twitter.webabile.it/api/',
+  rootUrl: 'https://twitter.webabile.it/api/',
   get: function(url, options) {
     return fetch(this.rootUrl + url, options)
       .then(checkHttpStatus)
