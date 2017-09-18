@@ -73,7 +73,8 @@ export function tweets(state = tweetsInitialState, action) {
     case types.USER_TWEETS_REQUEST:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
+        statusText: null
       };
 
     case types.USER_TWEETS_SUCCESS:
@@ -94,7 +95,8 @@ export function tweets(state = tweetsInitialState, action) {
     case types.ADD_TWEET_REQUEST:
       return {
         ...state,
-        isSaving: true
+        isSaving: true,
+        statusText: null
       };
 
     case types.ADD_TWEET_SUCCESS:
@@ -115,7 +117,8 @@ export function tweets(state = tweetsInitialState, action) {
     case types.DEL_TWEET_REQUEST:
       return {
         ...state,
-        isDeleting: true
+        isDeleting: true,
+        statusText: null
       };
 
     case types.DEL_TWEET_SUCCESS:
